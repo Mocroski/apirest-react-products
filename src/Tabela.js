@@ -2,7 +2,7 @@ function Tabela() {
 
     return(
         
-        <table>
+        <table className="table">
             <thead>
                 <tr>
                     <th>#</th>

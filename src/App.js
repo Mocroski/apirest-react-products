@@ -92,6 +92,45 @@ const remover = () => {
   })
 }
 
+//alterar produto
+const alterar = () => {
+  fetch('http://localhost:8080/alterar', {
+    method:'put',
+    body:JSON.stringify(objProduto),
+    headers:{
+      'Content-type':'application/json',
+      'Accept':'application/json'
+    }
+  })
+//promisse
+  .then(retorno => retorno.json())
+  .then(retorno_convertido => {
+    if(retorno_convertido.mensagem !== undefined){
+      alert(retorno_convertido.mensagem);
+    } else{
+      
+      alert('Produto alterado com sucesso!');
+
+       //copia do vetor de produtos
+    let vetorTemp = [...produtos];
+
+    //preciso saber qual a posicao do produto que preciso remover por isso o indice
+    let indice = vetorTemp.findIndex((p) => { //parametro que vai ter acesso ao obj produto
+        return p.codigo === objProduto.codigo; //3 sinais de igual é uma  boa pratica do react
+    }); //metodo nativo do js que percorre o vetor e retorna a posicao de uma verificacao
+
+    //remover produto do vetortemporario
+    vetorTemp[indice] = objProduto;
+
+    //atualizar o vetor de produtos
+    setProdutos(vetorTemp);
+
+      limparFormulario();
+    }
+  })
+}
+
+
 //limpar formulario
 const limparFormulario = () => {
   setObjProduto(produto);
@@ -108,7 +147,7 @@ const selecionarProduto = (indice) => {
   return (
     <div >
       
-      <Formulario botao={btnCadastrar} eventoTeclado={aoDigitar} cadastrar={cadastrar} obj={objProduto} remover={remover} />
+      <Formulario botao={btnCadastrar} eventoTeclado={aoDigitar} cadastrar={cadastrar} obj={objProduto} remover={remover} alterar={alterar}/>
       <Tabela vetor={produtos} selecionar={selecionarProduto}/>
     </div>
   );
